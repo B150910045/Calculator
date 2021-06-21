@@ -14,8 +14,9 @@ public class CalculatorWindow {
 	private JFrame frame;
 	private JTextField txt_result;
 	
-	private double numbers[];
-	private int index = 0;
+	private double numbers[] = new double[2];
+	int count = 0;
+	
 	private double number1, number2;
 	private double result;
 	private String temdeg;
@@ -53,7 +54,7 @@ public class CalculatorWindow {
 		frame = new JFrame();
 		frame.setResizable(false);
 		frame.setTitle("Calculator");
-		frame.setBounds(100, 100, 370, 350);
+		frame.setBounds(100, 100, 440, 350);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -211,8 +212,8 @@ public class CalculatorWindow {
 		btn_plusOrMinus.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(!txt_result.getText().isEmpty()) {
-					number1 = Double.parseDouble(txt_result.getText());
-					result = calc.plusOrMinus(number1);
+					numbers[count] = Double.parseDouble(txt_result.getText());
+					result = calc.plusOrMinus(numbers[count]);
 					txt_result.setText(String.valueOf(result));
 				}
 			}
@@ -222,11 +223,47 @@ public class CalculatorWindow {
 		frame.getContentPane().add(btn_plusOrMinus);
 		
 		JButton btn_multiply = new JButton("*");
+		btn_multiply.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(!txt_result.getText().isEmpty()) {
+					if(count == 0) {
+						numbers[count] = Double.parseDouble(txt_result.getText());
+						count = 1;
+						temdeg = "*";
+						txt_result.setText("");
+					}else if(count == 1){
+						numbers[count] = Double.parseDouble(txt_result.getText());
+						result = calc.equal(numbers[0], numbers[1], temdeg);
+						numbers[0] = result;
+						temdeg = "*";
+						txt_result.setText("");
+					}
+				}
+			}
+		});
 		btn_multiply.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btn_multiply.setBounds(220, 69, 60, 50);
 		frame.getContentPane().add(btn_multiply);
 		
 		JButton btn_divide = new JButton("/");
+		btn_divide.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(!txt_result.getText().isEmpty()) {
+					if(count == 0) {
+						numbers[count] = Double.parseDouble(txt_result.getText());
+						count = 1;
+						temdeg = "/";
+						txt_result.setText("");
+					}else if(count == 1){
+						numbers[count] = Double.parseDouble(txt_result.getText());
+						result = calc.equal(numbers[0], numbers[1], temdeg);
+						numbers[0] = result;
+						temdeg = "/";
+						txt_result.setText("");
+					}
+				}
+			}
+		});
 		btn_divide.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btn_divide.setBounds(220, 130, 60, 50);
 		frame.getContentPane().add(btn_divide);
@@ -235,11 +272,21 @@ public class CalculatorWindow {
 		btn_sub.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(!txt_result.getText().isEmpty()) {
-					number1 = Double.parseDouble(txt_result.getText());
-					index++;
-					temdeg = "-";
+					if(count == 0) {
+						numbers[count] = Double.parseDouble(txt_result.getText());
+						count = 1;
+						temdeg = "-";
+						txt_result.setText("");
+					}else if(count == 1){
+						numbers[count] = Double.parseDouble(txt_result.getText());
+						result = calc.equal(numbers[0], numbers[1], temdeg);
+						numbers[0] = result;
+						temdeg = "-";
+						txt_result.setText("");
+					}
+				}else {
+					txt_result.setText("-");
 				}
-				txt_result.setText("");
 			}
 		});
 		btn_sub.setFont(new Font("Tahoma", Font.BOLD, 18));
@@ -249,19 +296,15 @@ public class CalculatorWindow {
 		JButton btn_equal = new JButton("=");
 		btn_equal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				switch(temdeg) {
-				case "+": {
-					number2 = Double.parseDouble(txt_result.getText());
-					result = calc.add(number1, number2);
+				if(txt_result.getText().isEmpty()) {
+					txt_result.setText("");
+				}else if(temdeg == "/" && numbers[1] == 0) {
+					txt_result.setText("cant divide by zero");
+				}else {
+					numbers[1] = Double.parseDouble(txt_result.getText());
+					result = calc.equal(numbers[0], numbers[1], temdeg);
 					txt_result.setText(String.valueOf(result));
-					break;
-				}
-				case "-":{
-					number2 = Double.parseDouble(txt_result.getText());
-					result = calc.sub(number1, number2);
-					txt_result.setText(String.valueOf(result));
-					break;
-				}
+					count = 0;
 				}
 			}
 		});
@@ -273,6 +316,10 @@ public class CalculatorWindow {
 		btn_clear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				txt_result.setText("");
+				count = 0;
+				numbers[0] = 0;
+				numbers[1] = 0;
+				temdeg = null;
 			}
 		});
 		btn_clear.setFont(new Font("Tahoma", Font.BOLD, 18));
@@ -283,16 +330,70 @@ public class CalculatorWindow {
 		btn_add.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(!txt_result.getText().isEmpty()) {
-					number1 = Double.parseDouble(txt_result.getText());
-					index++;
-					temdeg = "+";
+					if(count == 0) {
+						numbers[count] = Double.parseDouble(txt_result.getText());
+						count = 1;
+						temdeg = "+";
+						txt_result.setText("");
+					}else if(count == 1){
+						numbers[count] = Double.parseDouble(txt_result.getText());
+						result = calc.equal(numbers[0], numbers[1], temdeg);
+						numbers[0] = result;
+						temdeg = "+";
+						txt_result.setText("");
+					}
 				}
-				txt_result.setText("");
 			}
 		});
 		btn_add.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btn_add.setBounds(290, 130, 60, 111);
 		frame.getContentPane().add(btn_add);
+		
+		JButton btn_rem = new JButton("%");
+		btn_rem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(!txt_result.getText().isEmpty()) {
+					if(count == 0) {
+						numbers[count] = Double.parseDouble(txt_result.getText());
+						count = 1;
+						temdeg = "%";
+						txt_result.setText("");
+					}else if(count == 1){
+						numbers[count] = Double.parseDouble(txt_result.getText());
+						result = calc.equal(numbers[0], numbers[1], temdeg);
+						numbers[0] = result;
+						temdeg = "%";
+						txt_result.setText("");
+					}
+				}
+			}
+		});
+		btn_rem.setFont(new Font("Tahoma", Font.BOLD, 18));
+		btn_rem.setBounds(360, 69, 60, 50);
+		frame.getContentPane().add(btn_rem);
+		
+		JButton btn_pow = new JButton("^");
+		btn_pow.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(!txt_result.getText().isEmpty()) {
+					if(count == 0) {
+						numbers[count] = Double.parseDouble(txt_result.getText());
+						count = 1;
+						temdeg = "^";
+						txt_result.setText("");
+					}else if(count == 1){
+						numbers[count] = Double.parseDouble(txt_result.getText());
+						result = calc.equal(numbers[0], numbers[1], temdeg);
+						numbers[0] = result;
+						temdeg = "^";
+						txt_result.setText("");
+					}
+				}
+			}
+		});
+		btn_pow.setFont(new Font("Tahoma", Font.BOLD, 18));
+		btn_pow.setBounds(360, 130, 60, 50);
+		frame.getContentPane().add(btn_pow);
 	}
 
 }
