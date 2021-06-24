@@ -17,7 +17,6 @@ public class CalculatorWindow {
 	private double numbers[] = new double[2];
 	int count = 0;
 	
-	private double number1, number2;
 	private double result;
 	private String temdeg;
 
@@ -323,7 +322,7 @@ public class CalculatorWindow {
 			}
 		});
 		btn_clear.setFont(new Font("Tahoma", Font.BOLD, 18));
-		btn_clear.setBounds(290, 69, 60, 50);
+		btn_clear.setBounds(360, 130, 60, 50);
 		frame.getContentPane().add(btn_clear);
 		
 		JButton btn_add = new JButton("+");
@@ -369,7 +368,7 @@ public class CalculatorWindow {
 			}
 		});
 		btn_rem.setFont(new Font("Tahoma", Font.BOLD, 18));
-		btn_rem.setBounds(360, 69, 60, 50);
+		btn_rem.setBounds(360, 191, 60, 50);
 		frame.getContentPane().add(btn_rem);
 		
 		JButton btn_pow = new JButton("^");
@@ -392,8 +391,24 @@ public class CalculatorWindow {
 			}
 		});
 		btn_pow.setFont(new Font("Tahoma", Font.BOLD, 18));
-		btn_pow.setBounds(360, 130, 60, 50);
+		btn_pow.setBounds(360, 252, 60, 50);
 		frame.getContentPane().add(btn_pow);
+		
+		JButton btn_del = new JButton("Backspace");
+		btn_del.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(!txt_result.getText().isEmpty()) {
+					if(count == 0) {
+						String too = txt_result.getText();
+						too = too.substring(0, too.length() - 1);
+						txt_result.setText(too);
+					}
+				}
+			}
+		});
+		btn_del.setFont(new Font("Tahoma", Font.BOLD, 18));
+		btn_del.setBounds(290, 69, 130, 50);
+		frame.getContentPane().add(btn_del);
 	}
 
 }
